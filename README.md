@@ -1,9 +1,9 @@
 LAMPSLOW photon analysis
 
-** Create github ID 
+* Create github ID 
 
 
-** github use
+* github use
 ==================================
 1. Git Start
 
@@ -22,7 +22,7 @@ Make it simple like "lamps" or "lps"
 ==================================
 
 
-** File pill & push
+* File pill & push
 ==================================
 1. Always pull before change anything!!!
 
