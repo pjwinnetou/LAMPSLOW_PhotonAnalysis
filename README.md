@@ -18,12 +18,14 @@ $ git clone git@github.com:pjwinnetou/LAMPSLOW_PhotonAnalysis.git
 
 $ git remote add remotename git@github.com:pjwinnetou/LAMPSLOW_PhotonAnalysis.git 
 
-Name your remotename for the address.
+Name your remotename for the address. 
 Make it simple like "lamps" or "lps" 
+
 ==================================
 
 
 * File pill & push
+
 ==================================
 1. Always pull before change anything!!!
 
@@ -46,6 +48,7 @@ leave your message about your change for example "Parameter set updated"
 4. Push
 
 $ git push remotename master
+
 ================================
 
 
