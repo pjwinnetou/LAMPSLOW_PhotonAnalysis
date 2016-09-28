@@ -6,15 +6,16 @@ LAMPSLOW photon analysis
 * github use
 
 ==================================
-1. Git Start
+
+a) Git Start
 
 $ git init
 
-2. Clone git 
+b) Clone git 
 
 $ git clone git@github.com:pjwinnetou/LAMPSLOW_PhotonAnalysis.git
 
-3. Remote git
+c) Remote git
 
 $ git remote add remotename git@github.com:pjwinnetou/LAMPSLOW_PhotonAnalysis.git 
 
@@ -27,25 +28,25 @@ Make it simple like "lamps" or "lps"
 * File pill & push
 
 ==================================
-1. Always pull before change anything!!!
+a) Always pull before change anything!!!
 
 $ git pull
 
 somebody might have changed things and if you do not pull you will get an error
 
-2. Add new files
+b) Add new files
 
 $ git add yourfile 
 
 add your file if you have changed or added any files after you pull the new git version
 
-3. Commit your file 
+c) Commit your file 
 
 $ git commit -m "your message"
 
 leave your message about your change for example "Parameter set updated"
 
-4. Push
+d) Push
 
 $ git push remotename master
 
