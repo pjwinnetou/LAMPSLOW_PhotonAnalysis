@@ -1,0 +1,8 @@
+/vis/open OGLIX 900x900
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 60 150
+/vis/scene/add/axes 0 0 -40 5 cm
+/vis/scene/add/trajectories
+#/run/beamOn 10
+#/amd/useEventNumber 1
+#/amd/run

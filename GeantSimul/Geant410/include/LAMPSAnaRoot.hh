@@ -1,0 +1,66 @@
+//=================
+// LAMPSAnaRoot.hh
+//=================
+
+#ifndef LAMPSANAROOT_H
+#define LAMPSANAROOT_H 1
+
+#include "G4String.hh"
+
+#include <TROOT.h>
+#include <TSystem.h>
+#include <TFile.h>
+#include <TTree.h>
+#include <TDirectory.h>
+
+class LAMPSAnaRoot
+{
+	private:
+	/*
+	Int_t eventNum;
+	Int_T pNum;
+	Int_t pID;
+	Int_t vX, vY, vZ;
+	Int_t detID, detNum;
+	Double_t energyInit;
+	Double_t pX, pY, pZ;
+	Double_t mass;
+	Double_t energyDeposit;
+	Double_t hitTime;
+	*/
+
+	TFile *rootFile;
+	TDirectory *rootDir;
+	TTree *generatorDataTree;
+	TTree *simulationDataTree;
+
+	Int_t pID;
+	Double_t energyInit, mass, pX, pY, pZ;
+
+	Int_t eventID, trackID, parentID;
+	Double_t energyDeposit;
+	Double_t hitTime;
+	Int_t isTPC;
+	Int_t vX, vY, vZ;
+	Int_t isDC;
+	Int_t detID;
+	Double_t x, y, z;
+	Double_t postx, posty, postz;
+	Int_t isToF;
+  Int_t copyNum;
+	Int_t detNum;
+	Int_t isLAND;
+	Int_t layerNum, barNum;
+	Int_t isSiCsI;
+
+	public:
+	LAMPSAnaRoot();
+	~LAMPSAnaRoot();
+
+	void BeginOfEvent(Int_t eventNum);
+	void FillPrimaryVertex(Int_t pNum, Int_t pID, Double_t energyInit, Double_t mass, Double_t pX, Double_t pY, Double_t pZ);
+//	void FillTPC(Int_t pNum, Int_t parentID, Int_t pID, Int_t vX, Int_t vY, Int_t vZ, Double_t energyDeposit, Double_t hitTime);
+	void FillSiCsI(Int_t pNum, Int_t parentID, Int_t pID, Double_t x, Double_t y, Double_t z, Double_t energyDeposit, Double_t hitTime, Int_t copyNum, Int_t detNum);
+};
+
+#endif

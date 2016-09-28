@@ -1,0 +1,44 @@
+void rootlogon()
+{
+  cout << endl;
+  cout << endl;
+  cout << " *********************************************************************** " << endl;
+  cout << " *********************************************************************** " << endl;
+  cout << endl;
+  cout << " ======================================================================= " << endl;
+  cout << " =========================  NFADC400 in CNU   ========================== " << endl;
+  cout << " ========================= MONITORING PROGRAM ========================== " << endl;
+  cout << " ======================================================================= " << endl;
+  cout << " ================ For any problem - JaeBeom Park at KU   =============== " << endl;
+  cout << " ================     send e-mail - pjwinnetou@gmail.com =============== " << endl;
+  cout << " ======================================================================= " << endl;
+  cout << endl;
+  cout << "      NOTE!   " << endl;
+  cout << "  rootalias.C & rootlogon.C are required to read data  " << endl;
+  cout << endl;
+  cout << "  Reading data ... " << endl;
+  cout << "   - load(\"DATAFILE.root\"); " << endl;
+  cout << "     --> read the data file " << endl;
+  cout << endl;
+  cout << "   - plot(channelNum, eventNum) " << endl;
+  cout << "     --> plot the pulse (smeared or raw) for each " << endl;
+  cout << "         selected channel & event number " << endl;  
+  cout << endl;
+  cout << "   - plot_fit(channelNum, eventNum) " << endl;
+  cout << "     --> plot the pulse with fitting for each " << endl;
+  cout << "         selected channel & event number " << endl;
+  cout << endl;
+  cout << "   - plot_raw(channelNum, eventNum) " << endl;
+  cout << "     --> plot the sorted pulse (raw pulse) for each " << endl;
+  cout << "         selected channel & event number " << endl;
+  cout << endl;
+  cout << endl;
+  cout << " ======================================================================= " << endl;
+  cout << endl;
+  cout << " *********************************************************************** " << endl;
+  cout << " *********************************************************************** " << endl;
+  cout << endl;
+  cout << endl;
+  gPrintViaErrorHandler = kTRUE;
+  gErrorIgnoreLevel = kWarning;
+}
