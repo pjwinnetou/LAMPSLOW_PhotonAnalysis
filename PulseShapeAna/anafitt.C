@@ -80,6 +80,7 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
 
   data md;
  
+  //TString inputfile = "noise_2100_60_100000_Cs_32_ss.root";  
   TString inputfile = "Cs137_2100_60_100000_1_32_ss.root";  
   TString outputfile = inputfile;
   outputfile = "fitted_" + inputfile;
@@ -115,11 +116,14 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
 
   Float_t PSum = 0.;
   Float_t PInt = 0.;
+  Float_t Pfheight1[4], Pfheight_x1[4], Pheight1[4], Ptail1[4]; 
+  Float_t chisq1[4], chisqprob1[4], NDF1[4], tau_r1[4], tau_s1[4], tau_f1[4], ratio1[4], t01[4], A1[4];
+  Float_t IntStartVal1[4], IntEndVal1[4], TailIntStart1[4];
+  Int_t Pheight_x1[4], Ptail_x1[4];
   Float_t Pfheight, Pfheight_x, Pheight, Ptail; 
-  Float_t chisqprob, NDF, tau_r, tau_s, tau_f, ratio, t0, A;
+  Float_t chisq, chisqprob, NDF, tau_r, tau_s, tau_f, ratio, t0, A;
   Float_t IntStartVal, IntEndVal, TailIntStart;
   Int_t Pheight_x, Ptail_x;
-  Double_t chisq;
 
   TTree *writeTree = new TTree("tr","");
   writeTree->Branch("eventID",&md.eventID,"eventID/I");
@@ -132,7 +136,7 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
   writeTree->Branch("Pheight",&Pheight,"Pheight/F");
   writeTree->Branch("Pheight_x",&Pheight_x,"Pheight_x/I");
   writeTree->Branch("Ptail",&Ptail,"Ptail/F");
-  writeTree->Branch("chisq",&chisq,"chisq/D");
+  writeTree->Branch("chisq",&chisq,"chisq/F");
   writeTree->Branch("chisqprob",&chisqprob,"chisqprob/F");
   writeTree->Branch("NDF",&NDF,"NDF/F");
   writeTree->Branch("A",&A,"A/F");
@@ -288,11 +292,11 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
 
     FitFunction -> SetParameters(485,11,12.06,82.04,4.3355,0.6038);
     FitFunction -> SetParLimits(0, 200,10000000);
-    FitFunction -> SetParLimits(1,  5,50);
-    FitFunction -> SetParLimits(2,  0.1,7100);
-    FitFunction -> SetParLimits(3,  0.,1403);
-    FitFunction -> SetParLimits(4, 0.1, 40.);
-    FitFunction -> SetParLimits(5, 0.1,80);
+    FitFunction -> SetParLimits(1,  3,60);
+    FitFunction -> SetParLimits(2,  0.000000000000000000001,7100);
+    FitFunction -> SetParLimits(3,  0.000000000000000000001,2803);
+    FitFunction -> SetParLimits(4, 0.000000000000000000001, 60.);
+    FitFunction -> SetParLimits(5, 0.000000000000000000001,150);
 
     /*
     FitFunction -> SetRange(fFitrange_start, fFitrange_end);
@@ -313,19 +317,71 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
   */
  //   gROOT -> SetBatch(1);
  //   gROOT -> ProcessLine("gErrorIgnoreLevel = 2001;");
-    fGraph -> Fit("fFit","REQM");
-    fGraph -> Draw("APL same");
-    NDF = FitFunction -> GetNDF();
-    chisq = FitFunction -> GetChisquare();
-    chisqprob = FitFunction -> GetProb();
-    Pfheight = FitFunction -> GetMaximum(fFitrange_start,fFitrange_end);   
-    Pfheight_x = FitFunction -> GetMaximumX(fFitrange_start,fFitrange_end);
-    tau_r = FitFunction -> GetParameter(5);
-    tau_s = FitFunction -> GetParameter(3);
-    tau_f = FitFunction -> GetParameter(2);
-    ratio = FitFunction -> GetParameter(4);
-    t0 = FitFunction -> GetParameter(1);
-    A = FitFunction -> GetParameter(0);
+    for(int iq=0;iq<4;iq++)
+    {
+      fGraph -> Fit("fFit","REQM");
+      fGraph -> Draw("APL same");
+      NDF1[iq] = FitFunction->GetNDF();
+      chisq1[iq] = FitFunction->GetChisquare();
+      chisqprob1[iq] = FitFunction -> GetProb();
+      Pfheight1[iq] = FitFunction -> GetMaximum(fFitrange_start,fFitrange_end);   
+      Pfheight_x1[iq] = FitFunction -> GetMaximumX(fFitrange_start,fFitrange_end);
+      tau_r1[iq] = FitFunction -> GetParameter(5);
+      tau_s1[iq] = FitFunction -> GetParameter(3);
+      tau_f1[iq] = FitFunction -> GetParameter(2);
+      ratio1[iq] = FitFunction -> GetParameter(4);
+      t01[iq] = FitFunction -> GetParameter(1);
+      A1[iq] = FitFunction -> GetParameter(0);
+    } 
+    for(int iq=0;iq<3;iq++)
+    {
+      if(TMath::Abs(chisq1[iq]/NDF1[iq]-1)>=TMath::Abs(chisq1[iq+1]/NDF1[iq+1]-1))
+      {
+        NDF1[iq] = NDF1[iq+1];
+        chisq1[iq] = chisq1[iq+1];
+        chisqprob1[iq] = chisqprob1[iq+1];
+        Pfheight1[iq] = Pfheight1[iq+1];
+        Pfheight_x1[iq] = Pfheight_x1[iq+1];
+//        Pheight1[iq] = Pheight[iq+1];
+//        Pheight_x1[iq] = Pheight_x[iq+1];
+        tau_r1[iq] = tau_r1[iq+1];
+        tau_s1[iq] = tau_s1[iq+1];
+        tau_f1[iq] = tau_f1[iq+1];
+        ratio1[iq] = ratio1[iq+1];
+        t01[iq] = t01[iq+1];
+        A1[iq] = A1[iq+1];
+      }
+      else if(TMath::Abs(chisq1[iq]/NDF1[iq]-1)<TMath::Abs(chisq1[iq+1]/NDF1[iq+1]-1))
+      {
+        NDF1[iq+1] = NDF1[iq];
+        chisq1[iq+1] = chisq1[iq];
+        chisqprob1[iq+1] = chisqprob1[iq];
+        Pfheight1[iq+1] = Pfheight1[iq];
+        Pfheight_x1[iq+1] = Pfheight_x1[iq];
+//        Pheight1[iq+1] = Pheight[iq];
+//        Pheight_x1[iq+1] = Pheight_x[iq];
+        tau_r1[iq+1] = tau_r1[iq];
+        tau_s1[iq+1] = tau_s1[iq];
+        tau_f1[iq+1] = tau_f1[iq];
+        ratio1[iq+1] = ratio1[iq];
+        t01[iq+1] = t01[iq];
+        A1[iq+1] = A1[iq];
+      }
+    }
+
+
+
+    NDF = NDF1[0]; 
+    chisq = chisq1[0];
+    chisqprob = chisqprob1[0];
+    Pfheight = Pfheight1[0];
+    Pfheight_x = Pfheight_x1[0];
+    tau_r = tau_r1[0];
+    tau_s = tau_s1[0];
+    tau_f = tau_f1[0];
+    ratio = ratio1[0];
+    A = A1[0];
+
     //if(i%100==0 && i>6100){
     /*if(i>6100){
     cout << endl;
@@ -349,6 +405,7 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
     TailIntStart = FitFunction -> GetX(Pfheight*0.95,Pfheight_x,Pfheight_x + 200./RecordLength);
 
     PInt = FitFunction -> Integral(IntStartVal,IntEndVal);
+    Ptail = FitFunction -> Integral(TailIntStart,IntEndVal);
     for(int isum = 0; isum < (int)IntStartVal; isum++)
     {
       PSum += draw_FADC[isum];
