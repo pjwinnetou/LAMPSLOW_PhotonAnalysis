@@ -321,7 +321,7 @@ void plot_fit(Int_t CH, Int_t eventNum, TCanvas *cvs_fit)
       cout << "ERROR!!!! ::::  beginning of the fitting is 0 ::::: Something strange in the waveform or pedestal " << endl;
     }
    
-    FitFunction -> SetRange(beginfit_val-1.75, endfit_val+10.25);
+    FitFunction -> SetRange(beginfit_val-1.8, endfit_val+10.25);
     FitFunction -> SetParName(0,"A");
     FitFunction -> SetParName(1,"t_{0}");
     FitFunction -> SetParName(2,"#tau_{f}");
@@ -329,17 +329,18 @@ void plot_fit(Int_t CH, Int_t eventNum, TCanvas *cvs_fit)
     FitFunction -> SetParName(4,"R");
     FitFunction -> SetParName(5,"#tau_{r}");
 
-    FitFunction -> SetParameters(4854,11,12.06,82.04,0.43355,0.6038);
+    FitFunction -> SetParameters(485,11,12.06,82.04,4.3355,0.6038);
     FitFunction -> SetParLimits(0, 200,10000000);
     FitFunction -> SetParLimits(1,  5,50);
-    FitFunction -> SetParLimits(2,  1,7100);
-    FitFunction -> SetParLimits(3,  1,10030);
-    FitFunction -> SetParLimits(4, 0.1, 15.);
+    FitFunction -> SetParLimits(2,  0.1,7100);
+    FitFunction -> SetParLimits(3,  0.,1403);
+    FitFunction -> SetParLimits(4, 0.1, 40.);
     FitFunction -> SetParLimits(5, 0.1,80);
 
     fGraph_fit -> Fit("fFit","REM");
     cout << "beginfit       : " << beginfit_val << endl; 
-    cout << "chisquare prob : " << (double)FitFunction->GetProb()*TMath::Power(10000000,10) << endl;
+    cout << "chisquare prob : " << (double)FitFunction->GetProb() << endl;
+    //cout << "chisquare prob : " << (double)FitFunction->GetProb()*TMath::Power(10000000,10) << endl;
 
     fGraph_fit->Draw("APL same");
 

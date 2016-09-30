@@ -80,12 +80,12 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
 
   data md;
  
-  TString inputfile = "Cs137_2310_214_32_ss.root";  
+  TString inputfile = "Cs137_2100_60_100000_1_32_ss.root";  
   TString outputfile = inputfile;
   outputfile = "fitted_" + inputfile;
    
 
-  TFile *openFile = new TFile(Form("/home/deathold/work/LAMPS/lamps_low_experiment/lampslow_CsI_experiment/KU_CNU_TEST/Ana/ssData/%s",inputfile.Data()),"READ");
+  TFile *openFile = new TFile(Form("Ana/ssData/%s",inputfile.Data()),"READ");
   TFile *writeFile = new TFile(Form("%s",outputfile.Data()),"recreate");
   
   TTree *finaltr = (TTree*) openFile -> Get("finaldata");
@@ -132,7 +132,7 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
   writeTree->Branch("Pheight",&Pheight,"Pheight/F");
   writeTree->Branch("Pheight_x",&Pheight_x,"Pheight_x/I");
   writeTree->Branch("Ptail",&Ptail,"Ptail/F");
-  writeTree->Branch("chisq",&chisq,"chisq/F");
+  writeTree->Branch("chisq",&chisq,"chisq/D");
   writeTree->Branch("chisqprob",&chisqprob,"chisqprob/F");
   writeTree->Branch("NDF",&NDF,"NDF/F");
   writeTree->Branch("A",&A,"A/F");
@@ -278,8 +278,7 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
    // fFitrange_end = endfit_val + (double)10./RecordLength;
     fFitrange_start = beginfit_val - 1.75;
     fFitrange_end = endfit_val + 10.25;
-
-    FitFunction -> SetRange(beginfit_val-1.75, endfit_val+10.25);
+    FitFunction -> SetRange(beginfit_val-1.8, endfit_val+10.25);
     FitFunction -> SetParName(0,"A");
     FitFunction -> SetParName(1,"t_{0}");
     FitFunction -> SetParName(2,"#tau_{f}");
@@ -287,13 +286,14 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
     FitFunction -> SetParName(4,"R");
     FitFunction -> SetParName(5,"#tau_{r}");
 
-    FitFunction -> SetParameters(600,14,300,1290,0.7,16);
+    FitFunction -> SetParameters(485,11,12.06,82.04,4.3355,0.6038);
     FitFunction -> SetParLimits(0, 200,10000000);
     FitFunction -> SetParLimits(1,  5,50);
-    FitFunction -> SetParLimits(2,  1,7100);
-    FitFunction -> SetParLimits(3,  1,10030);
-    FitFunction -> SetParLimits(4, 0.1, 10.);
+    FitFunction -> SetParLimits(2,  0.1,7100);
+    FitFunction -> SetParLimits(3,  0.,1403);
+    FitFunction -> SetParLimits(4, 0.1, 40.);
     FitFunction -> SetParLimits(5, 0.1,80);
+
     /*
     FitFunction -> SetRange(fFitrange_start, fFitrange_end);
     FitFunction -> SetParName(0,"A");
@@ -311,8 +311,8 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
     FitFunction -> SetParLimits(4, 0.1, 0.97);
     FitFunction -> SetParLimits(5, 0.4,80);
   */
-    gROOT -> SetBatch(1);
-    gROOT -> ProcessLine("gErrorIgnoreLevel = 2001;");
+ //   gROOT -> SetBatch(1);
+ //   gROOT -> ProcessLine("gErrorIgnoreLevel = 2001;");
     fGraph -> Fit("fFit","REQM");
     fGraph -> Draw("APL same");
     NDF = FitFunction -> GetNDF();
