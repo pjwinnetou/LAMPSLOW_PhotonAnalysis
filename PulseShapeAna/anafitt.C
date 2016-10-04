@@ -80,8 +80,8 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
 
   data md;
  
-  //TString inputfile = "noise_2100_60_100000_Cs_32_ss.root";  
-  TString inputfile = "Cs137_2100_60_100000_1_32_ss.root";  
+  TString inputfile = "noise_2100_60_100000_Cs_32_ss.root";  
+  //TString inputfile = "Cs137_2100_60_100000_1_32_ss.root";  
   TString outputfile = inputfile;
   outputfile = "fitted_" + inputfile;
    
@@ -291,12 +291,12 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
     FitFunction -> SetParName(5,"#tau_{r}");
 
     FitFunction -> SetParameters(485,11,12.06,82.04,4.3355,0.6038);
-    FitFunction -> SetParLimits(0, 200,10000000);
+    FitFunction -> SetParLimits(0, 0.,10000000);
     FitFunction -> SetParLimits(1,  3,60);
-    FitFunction -> SetParLimits(2,  0.000000000000000000001,7100);
-    FitFunction -> SetParLimits(3,  0.000000000000000000001,2803);
-    FitFunction -> SetParLimits(4, 0.000000000000000000001, 60.);
-    FitFunction -> SetParLimits(5, 0.000000000000000000001,150);
+    FitFunction -> SetParLimits(2,  0.,7100);
+    FitFunction -> SetParLimits(3,  0.,2803);
+    FitFunction -> SetParLimits(4, 0., 60.);
+    FitFunction -> SetParLimits(5, 0.,150);
 
     /*
     FitFunction -> SetRange(fFitrange_start, fFitrange_end);
@@ -315,8 +315,8 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
     FitFunction -> SetParLimits(4, 0.1, 0.97);
     FitFunction -> SetParLimits(5, 0.4,80);
   */
- //   gROOT -> SetBatch(1);
- //   gROOT -> ProcessLine("gErrorIgnoreLevel = 2001;");
+    gROOT -> SetBatch(1);
+    gROOT -> ProcessLine("gErrorIgnoreLevel = 2001;");
     for(int iq=0;iq<4;iq++)
     {
       fGraph -> Fit("fFit","REQM");
