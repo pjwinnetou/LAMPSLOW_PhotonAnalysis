@@ -381,6 +381,7 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
     tau_f = tau_f1[0];
     ratio = ratio1[0];
     A = A1[0];
+    t0 = t01[0];  
 
     //if(i%100==0 && i>6100){
     /*if(i>6100){
