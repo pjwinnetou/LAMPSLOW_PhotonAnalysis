@@ -296,7 +296,7 @@ void anafitt( int nevt_min = 0, int nevt_max = 10, int chselect = 1)
     FitFunction -> SetParLimits(2,  0.,7100);
     FitFunction -> SetParLimits(3,  0.,2803);
     FitFunction -> SetParLimits(4, 0., 60.);
-    FitFunction -> SetParLimits(5, 0.,150);
+    FitFunction -> SetParLimits(5, 0.2,150);
 
     /*
     FitFunction -> SetRange(fFitrange_start, fFitrange_end);
