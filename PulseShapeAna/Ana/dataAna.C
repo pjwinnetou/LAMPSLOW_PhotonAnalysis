@@ -1,7 +1,12 @@
 void dataAna(){
   gROOT->Macro("~/rootlogon.C");
-  TFile *f1 = new TFile("../Cs137_Ana_Sgn_Front.root","READ");
-  TFile *f2 = new TFile("../Cs137_Ana_Noise.root","READ");
+  gStyle->SetOptFit(0);
+
+  TLatex *lt1 = new TLatex();
+  lt1->SetNDC();
+
+  TFile *f1 = new TFile("../fitted_New_JBSet_Cs137_2100_60_100000_1_front_32_ss_4thFits.root","READ");
+  TFile *f2 = new TFile("../fitted_New_JBSet_noise_2100_60_100000_Cs_32_ss_4thFits.root","READ");
 
   const int nbins = 200;
   TH1F *hSgn = new TH1F("hSgn",";Full Pulse Charge (Channel);Counts",nbins,0.0,2000);
@@ -9,18 +14,12 @@ void dataAna(){
   hSgn->Sumw2();
   hNos->Sumw2();
 
-  TTree *tr1 = (TTree*)f1->Get("data");
-  TTree *tr2 = (TTree*)f2->Get("data");
+  TTree *tr1 = (TTree*)f1->Get("tr");
+  TTree *tr2 = (TTree*)f2->Get("tr");
 
-  // Cut condition applied 
-  //tr1->Draw("Pint>>hSgn","","");
-  //tr2->Draw("Pint>>hNos","","");
-  //tr1->Draw("Pint>>hSgn","Pfheight > 40 && chisq < 0.006 && tau_r > 0.20 && tau_f < 20.0 && (IntEndVal-Pfheight_x) > 30","");
-  //tr2->Draw("Pint>>hNos","Pfheight > 40 && chisq < 0.006 && tau_r > 0.20 && tau_f < 20.0 && (IntEndVal-Pfheight_x) > 30","");
-  //tr1->Draw("Pint>>hSgn","Pfheight > 10 && chisq/NDF < 2.0 && tau_f < 15.0 && (IntEndVal-Pfheight_x) > 20 && tau_r < 15","");
-  //tr2->Draw("Pint>>hNos","Pfheight > 10 && chisq/NDF < 2.0 && tau_f < 15.0 && (IntEndVal-Pfheight_x) > 20 && tau_r < 15","");
-  tr1->Draw("Pint>>hSgn","Pfheight > 10 && chisq/NDF < 2.0 && tau_f < 15.0 && (IntEndVal-Pfheight_x) > 20 && tau_r < 10 && tau_s > 15","");
-  tr2->Draw("Pint>>hNos","Pfheight > 10 && chisq/NDF < 2.0 && tau_f < 15.0 && (IntEndVal-Pfheight_x) > 20 && tau_r < 10 && tau_s > 15","");
+  // Cut condition applied (23 keV threshold)
+  tr1->Draw("Pint>>hSgn","chisq/NDF >0.4 && chisq/NDF < 2.0 && chisqprob < 1.0 && chisqprob > 0.0 && tau_r > 0.2 && Pint > 50.0","");
+  tr2->Draw("Pint>>hNos","chisq/NDF >0.4 && chisq/NDF < 2.0 && chisqprob < 1.0 && chisqprob > 0.0 && tau_r > 0.2 && Pint > 50.0","");
 
   hSgn->Draw();
   hNos->Draw();
@@ -41,7 +40,7 @@ void dataAna(){
   hSgn->Draw("Hist");
   hNos->Draw("same Hist");
 
-  c3->SaveAs("plot_Sgn_comp2.png");
+  c3->SaveAs("plot_Sgn_comp.png");
 
 
   TCanvas *c1 = new TCanvas("c1","",1200, 600);
@@ -51,14 +50,26 @@ void dataAna(){
   c1->cd(2);
   hNos->Draw();
 
-  c1->SaveAs("plot_Sgn_Noise2.png");
+  c1->SaveAs("plot_Sgn_Noise.png");
 
-  TCanvas *c2 = new TCanvas("c2","",1200,600);
+  TF1 *Gaus = new TF1("Gaus","[0]*TMath::Gaus(x,[1],[2],1)",1300,1500);
+  Gaus->SetParNames("Yields","Mean","Sigma");
+  Gaus->SetLineColor(kRed+2);
+  Gaus->SetLineStyle(2);
+  Gaus->SetParameters(5,1400,100);
+
+  TCanvas *c2 = new TCanvas("c2","",800,600);
   c2->cd();
   hSgn->Add(hNos,-1);
   hSgn->SetMinimum(0.0);
-  hSgn->Draw("HIST");
+  hSgn->Fit("Gaus","MQR");
+  //hSgn->Draw("E");
+  //hSgn->Draw("HIST");
+  lt1->DrawLatex(0.2,0.9,Form("#chi^{2}/ndf : %0.2f/%d",Gaus->GetChisquare(),Gaus->GetNDF()));
+  lt1->DrawLatex(0.2,0.84,Form("Mean : %0.1f #pm %0.1f",Gaus->GetParameter(1),Gaus->GetParError(1)));
+  lt1->DrawLatex(0.2,0.78,Form("#sigma : %0.1f #pm %0.2f (%0.1f%%)",Gaus->GetParameter(2),Gaus->GetParError(2),Gaus->GetParameter(2)/Gaus->GetParameter(1)*100));
+  cout<<" NDF : "<<Gaus->GetNDF()<<endl;
 
-  c2->SaveAs("plot_Sgn_sub2.png");
+  c2->SaveAs("plot_Sgn_sub.png");
 
 }
