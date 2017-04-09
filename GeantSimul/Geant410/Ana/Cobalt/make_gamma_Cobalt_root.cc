@@ -9,9 +9,9 @@
 #include <iostream>
 using namespace std;
 
-void make_gamma_root(double CsIZ=47, double Resol = 3)
+void make_gamma_Cobalt_root(double CsIZ=47, double Resol = 3, int fCob = 1170)
 {
-	TFile *openFile = new TFile("./../rawData_lampslow.root", "READ");
+	TFile *openFile = new TFile(Form("./rawData_lampslow_%d_%.f.root",fCob,Resol), "READ");
 
 	Int_t eventID, trackID, pID, pdg, parentID, sEventID, sTrackID, isSiCsI, detID;
 	Double_t hitTime, energyInit, edep, edep1, x_pre, y_pre, z_pre, z_primvert, z_secvert, Depth;
@@ -28,7 +28,7 @@ void make_gamma_root(double CsIZ=47, double Resol = 3)
 		SimulationTree -> SetBranchAddress("detID", &detID);
 
 
-	TFile *writeFile = new TFile(Form("./Gamma_Cs137_1M_CsI%.fmm_res%.f.root",CsIZ,Resol), "RECREATE");
+	TFile *writeFile = new TFile(Form("./Gamma_Cobalt%d_1M_CsI%.fmm_res%.f.root",fCob,CsIZ,Resol), "RECREATE");
 	
   TTree *dE_E = new TTree("Hit", "Neutron Hit");
 		dE_E -> Branch("pdg", &pdg, "pdg/I");
