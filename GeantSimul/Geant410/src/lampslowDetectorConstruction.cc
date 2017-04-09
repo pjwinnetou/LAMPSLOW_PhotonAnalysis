@@ -80,7 +80,7 @@ G4VPhysicalVolume* lampslowDetectorConstruction::Construct()
   TestSiBlockLV -> SetVisAttributes(TestSiBlockSD);
 */
   //CsI test
-  G4Box* TestCsIBlock = new G4Box("TestCsI", 90*CLHEP::mm, 90*CLHEP::mm, 47*CLHEP::mm);
+  G4Box* TestCsIBlock = new G4Box("TestCsI", 60*CLHEP::mm, 47*CLHEP::mm, 60*CLHEP::mm);
   G4LogicalVolume* TestCsIBlockLV = new G4LogicalVolume(TestCsIBlock, CsI, "TestCsIBlockLV");
   new G4PVPlacement(0, G4ThreeVector(0,0,400*mm+6*cm), "TestCsIBlock_PV", TestCsIBlockLV, labPV, false,0);
 

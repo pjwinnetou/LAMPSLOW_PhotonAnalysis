@@ -98,7 +98,7 @@ void lampslowPrimaryGeneratorAction::SetSingleParticleBeam()
 {
 
     beamParticle=particleTable->FindParticle("gamma");
-    kineticEnergy = (CLHEP::RandGauss::shoot(662,20))*keV;
+    kineticEnergy = (CLHEP::RandGauss::shoot(1170,1170/2.355*0.08))*keV;
   
 
   momentumDirection = G4ThreeVector(0,0,1);
